@@ -979,7 +979,10 @@ form.searchLocation .input-group-btn&gt;input[type="text"]:not(.fixed-width) {
               #foreach ($reference in $references)
                 #set ($spaceReference = $NULL)
                 #if ($reference != "WebHome" &amp;&amp; !$reference.endsWith(".WebHome"))
-                  #set ($spaceReference = $services.query.hql("select s from XWikiSpace s where s.reference = :ref").bindValue('ref', $reference).setWiki($wiki).execute()[0].getSpaceReference())
+                  #set ($res = $services.query.hql("select s from XWikiSpace s where s.reference = :ref").bindValue('ref', $reference).setWiki($wiki).execute())
+                  #if (!$res.isEmpty())
+                    #set ($spaceReference = $res[0].getSpaceReference())
+                  #end
                 #end
                 #if (!$spaceReference)
                   #set ($d = $services.model.resolveDocument($reference))
